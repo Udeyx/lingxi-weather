@@ -6,6 +6,7 @@ import PrimeVue from 'primevue/config'
 import 'primevue/resources/themes/aura-light-green/theme.css'
 import Antd from 'ant-design-vue'
 import 'primeicons/primeicons.css'
+import 'qweather-icons/font/qweather-icons.css'
 
 import App from './App.vue'
 import router from './router'
