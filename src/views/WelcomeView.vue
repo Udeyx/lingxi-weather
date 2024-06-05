@@ -3,7 +3,29 @@ import { ref } from 'vue'
 import cities from '@/assets/cities.json'
 import { useRouter } from 'vue-router'
 import type { LoginForm } from '@/types/welcome'
-import { login } from '@/api'
+import { login, register } from '@/api'
+import { useToast } from 'primevue/usetoast'
+import Toast from 'primevue/toast'
+
+const toast = useToast()
+
+const showSuccess = () => {
+    toast.add({
+        severity: 'success',
+        summary: '登录成功',
+        detail: '登录成功',
+        life: 3000
+    })
+}
+
+const showError = () => {
+    toast.add({
+        severity: 'error',
+        summary: '登录失败',
+        detail: '用户名或密码错误',
+        life: 3000
+    })
+}
 
 const router = useRouter()
 const form = ref<LoginForm>({
@@ -16,6 +38,12 @@ const formType = ref<'Login' | 'Register'>('Login')
 const isLoading = ref(false)
 const handleRegister = async () => {
     formType.value = 'Login'
+    isLoading.value = true
+    const res = await register(form.value)
+    if (res.status === 200) {
+        formType.value = 'Register'
+    }
+    isLoading.value = false
 }
 const handleLogin = async () => {
     isLoading.value = true
@@ -25,7 +53,13 @@ const handleLogin = async () => {
         localStorage.setItem('username', res.data.username)
         localStorage.setItem('area', res.data.default_area)
         localStorage.setItem('avatar', res.data.avatar)
-        await router.push({ name: 'home' })
+        showSuccess()
+        setTimeout(() => {
+            // 在这里写你想延迟执行的代码
+            router.push({ name: 'home' })
+        }, 1000) // 3000 毫秒 = 3 秒
+    } else {
+        showError()
     }
     isLoading.value = false
 }
@@ -33,6 +67,7 @@ const handleLogin = async () => {
 
 <template>
     <main class="flex h-screen w-screen items-center justify-center bg-[url('@/assets/bg.webp')]">
+        <Toast />
         <Card class="bg-slate-300/10 backdrop-blur-md">
             <template #title>
                 <h1 class="text-center text-3xl text-sky-500">灵犀气象</h1>
