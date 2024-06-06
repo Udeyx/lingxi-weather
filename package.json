@@ -22,6 +22,7 @@
     "ant-design-vue": "4.x",
     "axios": "^1.7.2",
     "chart.js": "^4.4.3",
+    "element-plus": "^2.7.4",
     "leaflet": "^1.9.4",
     "leaflet.markercluster": "^1.5.3",
     "pinia": "^2.1.7",

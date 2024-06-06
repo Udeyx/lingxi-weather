@@ -8,12 +8,16 @@ import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 import 'leaflet.markercluster'
 import ZAIHAI from '@/assets/disasters.json'
+import Hot from '@/assets/hott.json'
+
+
 export const useMarkerStore = defineStore('markerOptions', {
     state: () => ({
         // 存储播放幼儿园数据的 Interval
         //kindergartenInterval: null,
         isShowTmapWind: false,
-        isShowPOI: false
+        isShowPOI: false,
+        isShowHeat: false
     }),
     actions: {
         /*
@@ -142,11 +146,6 @@ export const useMarkerStore = defineStore('markerOptions', {
             this.isShowTmapWind = false
         },
         initPOI() {
-            const icon = new window.T.Icon({
-                iconUrl: 'http://api.tianditu.com/img/map/markerA.png',
-                iconSize: new window.T.Point(19, 27),
-                iconAnchor: new window.T.Point(10, 25)
-            })
             // 判断是否使用本地数据
             const data = ZAIHAI
             console.log(data)
@@ -219,6 +218,33 @@ export const useMarkerStore = defineStore('markerOptions', {
             //   duration: 3000,
             //   keepAliveOnHover: true,
             // });
-        }
+        },
+        initHeat() {
+            const tt = Hot
+            console.log(tt)
+            const res = []
+            for (let i = 0; i < tt.length; i++) {
+                res.push({
+                    name: tt[i].name,
+                    lat: tt[i].latitude,
+                    lng: tt[i].longitude,
+                    count: tt[i].count
+                });
+            }
+            const heatmapOverlay = new window.T.HeatmapOverlay({
+                "radius": 30,
+            });
+            console.log(heatmapOverlay);
+            const { addOverLay } = useTiandituStore()
+            addOverLay('HEAT', heatmapOverlay);
+            heatmapOverlay.setDataSet({data: res, max: 100});
+            this.isShowHeat = true
+        },
+        removeHeat() {
+            const { removeOverLay, mapOverLay } = useTiandituStore()
+            mapOverLay['HEAT'].clear()
+            removeOverLay('HEAT')
+            this.isShowHeat = false
+        },
     }
 })

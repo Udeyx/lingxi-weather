@@ -203,6 +203,40 @@ const railStyle = ({ focused, checked }) => {
                     </n-button>
                 </template>
             </n-list-item>
+            <n-list-item>
+                <div class="mb-2 flex flex-row items-center">
+                    <n-icon size="20" color="#0e7a0d">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                            viewBox="0 0 32 32"
+                        >
+                            <path d="M12 10h2v4h-2z" fill="currentColor"></path>
+                            <path d="M18 18h4v2h-4z" fill="currentColor"></path>
+                            <path d="M14 18v-2h-2v4h4v-2h-2z" fill="currentColor"></path>
+                            <path d="M16 4h12v12H16z" fill="currentColor"></path>
+                            <path
+                                d="M17.885 29.997l-6.066-3.855L4 27.989V4h10v4h-2V6H6v19.461l6.181-1.46l5.934 3.772L22.818 26H26v-6h-2v-2h4v10h-4.818l-5.297 1.997z"
+                                fill="currentColor"
+                            ></path>
+                        </svg>
+                    </n-icon>
+                    <span class="mx-2">地质灾害热力图 </span>
+                </div>
+                <!--                <div class="my-2">-->
+                <!--                    是否显示灾害记录-->
+                <!--                    <n-switch-->
+                <!--                        :value="pinia_useMarkerStore.isShowPOI"-->
+                <!--                        @click="pinia_useMarkerStore.switchPOI()"-->
+                <!--                    />-->
+                <!--                </div>-->
+                <template #suffix>
+                    <n-button type="info" @click="pinia_useMarkerStore.initHeat()">生成 </n-button>
+                    <n-button class="mt-2" type="warning" @click="pinia_useMarkerStore.removeHeat()"
+                    >销毁
+                    </n-button>
+                </template>
+            </n-list-item>
         </n-list>
     </div>
 </template>
