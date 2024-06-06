@@ -8,8 +8,10 @@ import { Mix } from '@antv/g2plot'
 import { groupBy, get } from '@antv/util'
 import { getWeatherHistory } from '@/api'
 import cities from '@/assets/cities.json'
+import cityMap from '@/assets/cityMap.json'
 
 const location = ref(101010100)
+const locName = ref("北京")
 const dataType = ref<'heat' | 'humidity' | 'windSpeed'>('heat')
 const historyData = ref<Weather[]>(mockHistoryWeather)
 const pieData = ref()
@@ -174,6 +176,7 @@ watch(location, async (newValue, oldValue) => {
     if (typeof newValue !== 'number') {
         return
     }
+    locName.value = cityMap[newValue.toString()]
     const res = await getWeatherHistory(newValue)
     function getDataByType(type) {
         return get(groupBy(res.data.line, 'type'), type, []).map((d) => ({
@@ -333,7 +336,7 @@ watch(location, async (newValue, oldValue) => {
 <template>
     <main class="flex h-full w-full flex-col items-center gap-4 overflow-y-auto p-2">
         <template class="flex w-full items-center justify-between">
-            <h1 class="text-2xl">北京市</h1>
+            <h1 class="text-2xl">{{ locName }}</h1>
             <div class="flex items-center gap-1">
                 <Dropdown
                     v-model="location"
