@@ -2,6 +2,7 @@
 import PredictCard from '@/components/home/PredictCard.vue'
 import RecommendCard from '@/components/home/RecommendCard.vue'
 import WeatherCard from '@/components/home/WeatherCard.vue'
+import SunChart from '@/components/home/SunChart.vue'
 </script>
 
 <template>
@@ -11,5 +12,6 @@ import WeatherCard from '@/components/home/WeatherCard.vue'
         <WeatherCard />
         <PredictCard />
         <RecommendCard />
+        <SunChart />
     </main>
 </template>
