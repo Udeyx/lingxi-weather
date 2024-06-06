@@ -16,7 +16,8 @@
   </Card>
 </template>
 
-<script>
+<script>  
+import { getSun } from '@/api'
 export default {
   data() {
     return {
@@ -94,56 +95,41 @@ export default {
       const day = String(date.getDate()).padStart(2, '0'); // 获取日期，并确保两位数
       return `${year}${month}${day}`; // 返回格式化后的字符串
     },
-    updateSunPosition() {
-      const apiKey = 'cd3900b167fa463fa9e987bc3dba16ca';
-      const location = '101010100';
-      const date = this.getCurrentDateString();
+    async updateSunPosition() {
+      const data = await getSun(101010100);
+      if(data.status != 200){
+        this.sunPositionX = -4
+        this.sunPositionY = 90
+      }
+      else{
+        const currentTime = new Date().getHours() + new Date().getMinutes() / 60;
+        const sunriseTime = new Date(data.data.sunrise).getHours() + new Date(data.data.sunrise).getMinutes() / 60;
+        const sunsetTime = new Date(data.data.sundown).getHours() + new Date(data.data.sundown).getMinutes() / 60;
 
-      fetch(`https://devapi.qweather.com/v7/astronomy/sun?location=${location}&date=${date}&key=${apiKey}`)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.json();
-        })
-        .then(data => {
-          if(data.code != 200){
-            this.sunPositionX = -4
-            this.sunPositionY = 90
-          }
-          else{
-            const currentTime = new Date().getHours() + new Date().getMinutes() / 60;
-            const sunriseTime = new Date(data.sunrise).getHours() + new Date(data.sunrise).getMinutes() / 60;
-            const sunsetTime = new Date(data.sunset).getHours() + new Date(data.sunset).getMinutes() / 60;
+        this.sunrise = sunriseTime;
+        this.sunset = sunsetTime;
+        if (currentTime >= this.sunrise && currentTime <= this.sunset) {
+          const canvas = this.$refs.sunChart;
+          const centerX = canvas.width / 2;
+          const centerY = canvas.height;
+          const radius = canvas.width / 2;
+          const totalDaylight = this.sunset - this.sunrise;
+          const timeSinceSunrise = currentTime - this.sunrise;
+          const angle = (timeSinceSunrise / totalDaylight) * Math.PI;
 
-            this.sunrise = sunriseTime;
-            this.sunset = sunsetTime;
-            if (currentTime >= this.sunrise && currentTime <= this.sunset) {
-              const canvas = this.$refs.sunChart;
-              const centerX = canvas.width / 2;
-              const centerY = canvas.height;
-              const radius = canvas.width / 2;
-              const totalDaylight = this.sunset - this.sunrise;
-              const timeSinceSunrise = currentTime - this.sunrise;
-              const angle = (timeSinceSunrise / totalDaylight) * Math.PI;
+          const sunX = (centerX - radius * Math.cos(angle))/4-3;
+          const sunY = (centerY - radius * Math.sin(angle))/2-8;
 
-              const sunX = (centerX - radius * Math.cos(angle))/4-3;
-              const sunY = (centerY - radius * Math.sin(angle))/2-8;
+          this.targetSunPositionX = sunX;
+          this.targetSunPositionY = sunY;
 
-              this.targetSunPositionX = sunX;
-              this.targetSunPositionY = sunY;
-
-              this.animateSun();
-            }
-            else{
-              this.sunPositionX = -4
-              this.sunPositionY = 90
-            }
-          }
-        })
-        .catch(error => {
-          console.error('There was a problem with your fetch operation:', error);
-        });
+          this.animateSun();
+        }
+        else{
+          this.sunPositionX = -4
+          this.sunPositionY = 90
+        }
+      }
     },
     animateSun() {
       if (this.animationFrameId) {

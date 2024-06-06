@@ -73,3 +73,7 @@ export async function getWeatherHistory(localid: number) {
 export async function getPredict() {
     return await instance.get('/getPredict')
 }
+
+export async function getSun(localid: number) {
+    return await instance.get(`/getSun/${localid}`)
+}
