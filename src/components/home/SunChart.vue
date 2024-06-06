@@ -28,7 +28,7 @@ export default {
       targetSunPositionY: null,
       intervalId: null,
       animationFrameId: null,
-      animationDuration: 10000, // 动画持续时间
+      animationDuration: 6000, // 动画持续时间
       progress: 0,
     };
   },
