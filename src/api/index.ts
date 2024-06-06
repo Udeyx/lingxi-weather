@@ -27,18 +27,18 @@ export async function register({
     phone,
     password,
     username,
-    area
+    locId
 }: {
     phone: string
     password: string
     username: string
-    area: string
+    locId: number
 }) {
     return await axios.post('http://114.116.201.58:8080/user/register/', {
         phone_num: phone,
         password,
         username,
-        default_area: +area
+        default_area: locId
     })
 }
 

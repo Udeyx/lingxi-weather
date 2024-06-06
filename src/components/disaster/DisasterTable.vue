@@ -1,5 +1,5 @@
 <template>
-    <div class="card">
+    <div class="card w-full">
         <DataTable
             v-model:filters="filters"
             :value="props.disasters"

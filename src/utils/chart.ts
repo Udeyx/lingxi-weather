@@ -50,6 +50,7 @@ const processForRadar = (rawData: number[], interval: number) => {
         labels: labels,
         datasets: [
             {
+                label: '天数',
                 data: processedData
             }
         ]
