@@ -184,7 +184,7 @@ export const useMarkerStore = defineStore('markerOptions', {
         },
         removePOI() {
             const { removeOverLay, mapOverLay } = useTiandituStore()
-            mapOverLay['ZAIHAI'].clear()
+            mapOverLay['ZAIHAI'].destroy
             removeOverLay('ZAIHAI')
             this.isShowPOI = false
         },
@@ -242,7 +242,6 @@ export const useMarkerStore = defineStore('markerOptions', {
         },
         removeHeat() {
             const { removeOverLay, mapOverLay } = useTiandituStore()
-            mapOverLay['HEAT'].clear()
             removeOverLay('HEAT')
             this.isShowHeat = false
         },

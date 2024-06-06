@@ -100,3 +100,6 @@ export async function subscribe(data: any) {
         subscribes: data
     })
 }
+export async function getSun(localid: number) {
+    return await instance.get(`/getSun/${localid}`)
+}

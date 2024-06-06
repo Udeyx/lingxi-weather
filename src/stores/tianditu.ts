@@ -50,8 +50,20 @@ export const useTiandituStore = defineStore("tianditu", {
     },
     destroyTmap() {
       if (this.Tmap) {
+        for (const key in this.mapOverLay) {
+          const value = this.mapOverLay[key];
+          value.destroy
+        }
+        this.mapOverLay = {};
+        for (const key in this.mapControl) {
+          const value = this.mapControl[key];
+          value.destroy
+        }
         this.mapControl = {};
-        this.mapTileLayer = {};
+        for (const key in this.mapTileLayer) {
+          const value = this.mapTileLayer[key];
+          value.destroy
+        }
         this.mapTileLayer = {};
         this.Tmap = null;
       }
