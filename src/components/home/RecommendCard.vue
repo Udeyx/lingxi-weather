@@ -40,7 +40,7 @@ onMounted(async () => {
 </script>
 
 <template>
-    <Card class="w-80 bg-sky-400/30 backdrop-blur-md md:w-96">
+    <Card class="w-80 bg-white/50 backdrop-blur-md md:w-96">
         <template #content>
             <div class="flex flex-col items-center">
                 <h1 class="mb-4 text-3xl">生活推荐</h1>
@@ -48,17 +48,16 @@ onMounted(async () => {
                     <Card
                         v-for="card in cards"
                         :key="card.name"
-                        class="h-36 bg-white/80 backdrop-blur-md"
+                        class="h-28 bg-blue-100/40 backdrop-blur-md"
                     >
                         <template #content>
-                            <div class="flex flex-col items-center gap-1">
-                                <Avatar :image="card.icon" />
+                            <div class="flex flex-col items-center">
+                                <!-- <Avatar :image="card.icon" size="small" /> -->
+                                <img :src="card.icon" width="28" height="28" />
                                 <h2 class="text-nowrap text-xl text-pink-300">
                                     {{ recommendation[card.name] }}
                                 </h2>
                             </div>
-                        </template>
-                        <template #footer>
                             <h4 class="text-nowrap text-center text-sm">{{ card.title }}</h4>
                         </template>
                     </Card>

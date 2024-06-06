@@ -3,15 +3,38 @@ import PredictCard from '@/components/home/PredictCard.vue'
 import RecommendCard from '@/components/home/RecommendCard.vue'
 import WeatherCard from '@/components/home/WeatherCard.vue'
 import SunChart from '@/components/home/SunChart.vue'
+import SixCard from '@/components/home/SixCard.vue'
+import { useWindowSize } from '@vueuse/core'
+const { width } = useWindowSize()
 </script>
 
 <template>
     <main
-        class="flex h-full flex-grow flex-wrap items-start justify-center gap-4 overflow-y-auto bg-[url('@/assets/bg.webp')]"
+        v-if="width > 768"
+        class="bg-[url('@/assets/bg.webp')] h-full flex-grow flex flex-col overflow-y-auto mt-4"
     >
-        <WeatherCard />
-        <PredictCard />
-        <RecommendCard />
-        <SunChart />
+        <div class="flex flex-wrap items-start justify-center gap-4 mb-4">
+            <WeatherCard class="h-full" />
+            <PredictCard class="h-full" />
+            <RecommendCard />
+        </div>
+        <div class="flex flex-wrap items-start justify-center gap-8">
+            <SixCard />
+            <SunChart />
+        </div>
+    </main>
+    <main
+        v-else
+        class="bg-[url('@/assets/bg.webp')] h-full flex-grow flex flex-col overflow-y-auto mt-4"
+    >
+        <div class="flex flex-wrap items-start justify-center gap-4 mb-4">
+            <WeatherCard />
+            <PredictCard />
+            <RecommendCard />
+        </div>
+        <div class="flex flex-wrap items-start justify-center gap-8">
+            <SixCard />
+            <SunChart />
+        </div>
     </main>
 </template>

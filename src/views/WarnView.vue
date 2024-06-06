@@ -8,5 +8,6 @@ const disasters = ref(historyDisasters)
 <template>
     <main class="flex h-full w-full flex-col items-center overflow-y-auto">
         <DisasterTable :disasters="disasters" />
+        <div class="flex-1 h-full w-full bg-white/50 backdrop-blur-md"></div>
     </main>
 </template>

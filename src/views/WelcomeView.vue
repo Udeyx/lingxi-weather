@@ -53,11 +53,13 @@ const handleLogin = async () => {
         localStorage.setItem('username', res.data.username)
         localStorage.setItem('area', res.data.default_area)
         localStorage.setItem('avatar', res.data.avatar)
+        localStorage.setItem('phone', form.value.phone)
+        localStorage.setItem('locId', res.data.default_area)
         showSuccess()
         setTimeout(() => {
             // 在这里写你想延迟执行的代码
             router.push({ name: 'home' })
-        }, 1000) // 3000 毫秒 = 3 秒
+        }, 500) // 3000 毫秒 = 3 秒
     } else {
         showError()
     }

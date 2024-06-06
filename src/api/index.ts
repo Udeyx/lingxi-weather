@@ -1,3 +1,4 @@
+import type { PersonProfile } from '@/types/person'
 import axios from 'axios'
 
 const instance = axios.create({
@@ -72,4 +73,30 @@ export async function getWeatherHistory(localid: number) {
 
 export async function getPredict() {
     return await instance.get('/getPredict')
+}
+
+export async function modifyUserProfile(profile: PersonProfile) {
+    await instance.post('/modifyUserProfile/', profile)
+}
+
+export async function getUserProfile() {
+    return await instance.get('/getUserProfile/')
+}
+
+export async function getCurWeather() {
+    return await instance.get('/getCurWeather/')
+}
+
+export async function getSixWeather() {
+    return await instance.get('/getSixPrediction/')
+}
+
+export async function getTodayPrediction() {
+    return await instance.get('/getTodayPrediction/')
+}
+
+export async function subscribe(data: any) {
+    await instance.post('/subscribe/', {
+        subscribes: data
+    })
 }

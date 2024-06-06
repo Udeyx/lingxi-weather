@@ -4,7 +4,7 @@
             v-model:filters="filters"
             :value="props.disasters"
             paginator
-            :rows="10"
+            :rows="12"
             filterDisplay="row"
         >
             <Column
