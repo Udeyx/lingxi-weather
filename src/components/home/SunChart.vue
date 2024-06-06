@@ -1,20 +1,18 @@
 <template>
   <Card class="bg-sky-400/30 backdrop-blur-md">
     <template #content>
-    <div class="sun-chart">
-      <img
-        v-if="sunPositionX !== null"
-        class="sun"
-        src="http://211.159.168.136:4000/files/100.png"
-        :style="{left: `${sunPositionX}%`,top: `${sunPositionY}%`}"
-        alt="Sun Icon"
-      />
-      <canvas ref="sunChart" width="400" height="200">
-      </canvas>
-      <div class="time-label sunrise-time" :style="{ left: '5px' }">日出时间: {{ formattedSunrise }}</div>
-      <div class="time-label sunset-time" :style="{ right: '5px' }">日落时间: {{ formattedSunset }}</div>
-    </div>
-  </template>
+      <div class="sun-chart">
+        <img
+          class="sun"
+          src="http://211.159.168.136:4000/files/100.png"
+          :style="{ left: `${sunPositionX}%`, top: `${sunPositionY}%` }"
+          alt="Sun Icon"
+        />
+        <canvas ref="sunChart" width="400" height="200"></canvas>
+        <div class="time-label sunrise-time" :style="{ left: '5px' }">日出时间: {{ formattedSunrise }}</div>
+        <div class="time-label sunset-time" :style="{ right: '5px' }">日落时间: {{ formattedSunset }}</div>
+      </div>
+    </template>
   </Card>
 </template>
 
@@ -22,11 +20,16 @@
 export default {
   data() {
     return {
-      sunrise: 0,
-      sunset: 24,
-      sunPositionX: null,
-      sunPositionY: null,
+      sunrise: 6,
+      sunset: 18,
+      sunPositionX: -4,
+      sunPositionY: 90,
+      targetSunPositionX: null,
+      targetSunPositionY: null,
       intervalId: null,
+      animationFrameId: null,
+      animationDuration: 10000, // 动画持续时间
+      progress: 0,
     };
   },
   mounted() {
@@ -35,7 +38,13 @@ export default {
     this.startSunPositionUpdater();
   },
   beforeDestroy() {
-    this.stopSunPositionUpdater();
+    if (this.animationFrameId) {
+      cancelAnimationFrame(this.animationFrameId);
+    }
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+      this.intervalId = null;
+    }
   },
   computed: {
     formattedSunrise() {
@@ -57,7 +66,7 @@ export default {
 
       // Draw the arc
       ctx.beginPath();
-      ctx.setLineDash([5, 5]); // 设置虚线样式，这里的数组表示5像素实线和5像素空白
+      ctx.setLineDash([5, 5]);
       ctx.arc(centerX, centerY, radius, Math.PI, 2 * Math.PI);
       ctx.strokeStyle = '#cccccc';
       ctx.lineWidth = 2;
@@ -65,78 +74,126 @@ export default {
       ctx.setLineDash([]);
 
       // Draw the sunrise and sunset icons
-      const sunriseX = centerX-radius
-      const sunsetX = centerX+radius
+      const sunriseX = centerX - radius;
+      const sunsetX = centerX + radius;
 
       ctx.beginPath();
-      ctx.arc(sunriseX+10, centerY-10, 5, 0, 2 * Math.PI);
+      ctx.arc(sunriseX + 10, centerY - 10, 5, 0, 2 * Math.PI);
       ctx.fillStyle = 'orange';
       ctx.fill();
 
       ctx.beginPath();
-      ctx.arc(sunsetX-10, centerY-10, 5, 0, 2 * Math.PI);
+      ctx.arc(sunsetX - 10, centerY - 10, 5, 0, 2 * Math.PI);
       ctx.fillStyle = 'red';
       ctx.fill();
     },
+    getCurrentDateString() {
+      const date = new Date(); // 获取当前日期
+      const year = date.getFullYear(); // 获取年份
+      const month = String(date.getMonth() + 1).padStart(2, '0'); // 获取月份，并确保两位数
+      const day = String(date.getDate()).padStart(2, '0'); // 获取日期，并确保两位数
+      return `${year}${month}${day}`; // 返回格式化后的字符串
+    },
     updateSunPosition() {
-      const apiKey = 'f79724a6ea3d41a5b6c345c4736a3d08'; // 替换为你的实际API密钥
-      const location = '101010100'; // 替换为你的实际位置
-      const date = '20240606';
+      const apiKey = 'cd3900b167fa463fa9e987bc3dba16ca';
+      const location = '101010100';
+      const date = this.getCurrentDateString();
 
       fetch(`https://devapi.qweather.com/v7/astronomy/sun?location=${location}&date=${date}&key=${apiKey}`)
-          .then(response => {
-            if (!response.ok) {
-              throw new Error('Network response was not ok');
-            }
-            return response.json();
-          })
-          .then(data => {
-              const currentTime = new Date().getHours() + new Date().getMinutes() / 60;
-              // 解析API响应，获取日出日落时间
-              const sunriseTime = new Date(data.sunrise).getHours(); // 提取小时部分作为日出时间
-              const sunsetTime = new Date(data.sunset).getHours(); // 提取小时部分作为日落时间
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          if(data.code != 200){
+            this.sunPositionX = -4
+            this.sunPositionY = 90
+          }
+          else{
+            const currentTime = new Date().getHours() + new Date().getMinutes() / 60;
+            const sunriseTime = new Date(data.sunrise).getHours() + new Date(data.sunrise).getMinutes() / 60;
+            const sunsetTime = new Date(data.sunset).getHours() + new Date(data.sunset).getMinutes() / 60;
 
-              // 更新组件中的日出日落时间数据
-              this.sunrise = sunriseTime;
-              this.sunset = sunsetTime;
-
-              if (currentTime >= this.sunrise && currentTime <= this.sunset) {
+            this.sunrise = sunriseTime;
+            this.sunset = sunsetTime;
+            if (currentTime >= this.sunrise && currentTime <= this.sunset) {
               const canvas = this.$refs.sunChart;
               const centerX = canvas.width / 2;
               const centerY = canvas.height;
               const radius = canvas.width / 2;
               const totalDaylight = this.sunset - this.sunrise;
               const timeSinceSunrise = currentTime - this.sunrise;
-              const angle = (timeSinceSunrise / totalDaylight) * Math.PI; // 将时间转换为弧度
+              const angle = (timeSinceSunrise / totalDaylight) * Math.PI;
 
-              // 计算太阳在圆弧上的坐标
               const sunX = (centerX - radius * Math.cos(angle))/4-3;
               const sunY = (centerY - radius * Math.sin(angle))/2-8;
-              // 设置太阳的位置
-              this.sunPositionX = sunX;
-              this.sunPositionY = sunY;
-            } else {
-              this.sunPositionX = null;
-              this.sunPositionY = null;
+
+              this.targetSunPositionX = sunX;
+              this.targetSunPositionY = sunY;
+
+              this.animateSun();
             }
-          })
-          .catch(error => {
-            console.error('There was a problem with your fetch operation:', error);
-          });
+            else{
+              this.sunPositionX = -4
+              this.sunPositionY = 90
+            }
+          }
+        })
+        .catch(error => {
+          console.error('There was a problem with your fetch operation:', error);
+        });
+    },
+    animateSun() {
+      if (this.animationFrameId) {
+        cancelAnimationFrame(this.animationFrameId);
+      }
+
+      const startTime = performance.now();
+      const duration = this.animationDuration;
+      const startX = this.sunPositionX;
+      const startY = this.sunPositionY;
+      const endX = this.targetSunPositionX;
+      const endY = this.targetSunPositionY;
+
+      const step = (timestamp) => {
+        const elapsed = timestamp - startTime;
+        this.progress = Math.min(elapsed / duration, 1);
+
+        const angle = Math.PI * this.progress;
+        const canvas = this.$refs.sunChart;
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height;
+        const radius = canvas.width / 2;
+
+        this.sunPositionX = (centerX - radius * Math.cos(angle))/4-3;
+        this.sunPositionY = (centerY - radius * Math.sin(angle))/2-8;
+
+        if (this.sunPositionX <= this.targetSunPositionX) {
+          this.animationFrameId = requestAnimationFrame(step);
+        } else {
+          // 动画完成后停止，不再重新开始
+          this.sunPositionX = this.targetSunPositionX;
+          this.sunPositionY = this.targetSunPositionY;
+        }
+      };
+
+      this.animationFrameId = requestAnimationFrame(step);
+    },
+    formatTime(time) {
+      const hours = Math.floor(time);
+      const minutes = Math.floor((time % 1) * 60);
+      return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
     },
     startSunPositionUpdater() {
-      this.intervalId = setInterval(this.updateSunPosition, 600000); // Update 10 minute
+      this.intervalId = setInterval(this.updateSunPosition, 300000); // Update 10 minute
     },
     stopSunPositionUpdater() {
       if (this.intervalId) {
         clearInterval(this.intervalId);
         this.intervalId = null;
       }
-    },
-    formatTime(time) {
-      const hours = Math.floor(time);
-      const minutes = Math.floor((time % 1) * 60);
-      return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
     },
   },
   watch: {
@@ -189,6 +246,6 @@ canvas {
   position: absolute;
   width: 30px;
   height: 30px;
-  transition: left 0.5s ease;
+  transition: left 0.1s ease, top 0.1s ease;
 }
 </style>
