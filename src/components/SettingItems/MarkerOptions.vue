@@ -150,13 +150,13 @@ const railStyle = ({ focused, checked }) => {
                     </n-icon>
                     <span class="mx-2">风场可视化 </span>
                 </div>
-                <div class="my-2">
-                    是否显示风场数据
-                    <n-switch
-                        :value="pinia_useMarkerStore.isShowTmapWind"
-                        @click="pinia_useMarkerStore.switchTmapWind()"
-                    />
-                </div>
+<!--                <div class="my-2">-->
+<!--                    是否显示风场数据-->
+<!--                    <n-switch-->
+<!--                        :value="pinia_useMarkerStore.isShowTmapWind"-->
+<!--                        @click="pinia_useMarkerStore.switchTmapWind()"-->
+<!--                    />-->
+<!--                </div>-->
                 <template #suffix>
                     <n-button type="info" @click="pinia_useMarkerStore.initTmapWind()"
                         >生成
