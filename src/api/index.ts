@@ -103,3 +103,7 @@ export async function subscribe(data: any) {
 export async function getSun(localid: number) {
     return await instance.get(`/getSun/${localid}`)
 }
+
+export async function getWarning() {
+    return await instance.get('/getWarning/')
+}

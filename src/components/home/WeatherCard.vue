@@ -18,7 +18,6 @@ function getNowFormatDate() {
 
 onMounted(async () => {
     const res = await getCurWeather()
-    console.log(res.data)
     if (res.status === 200) {
         curWeather.value = {
             ...curWeather.value,

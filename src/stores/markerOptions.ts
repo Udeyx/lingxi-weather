@@ -10,7 +10,6 @@ import 'leaflet.markercluster'
 import ZAIHAI from '@/assets/disasters.json'
 import Hot from '@/assets/hott.json'
 
-
 export const useMarkerStore = defineStore('markerOptions', {
     state: () => ({
         // 存储播放幼儿园数据的 Interval
@@ -166,11 +165,13 @@ export const useMarkerStore = defineStore('markerOptions', {
             //     addOverLay('POI', _CloudCollection)
             // })
             const lnglats = []
-            data.forEach((item) => {
+            let i = 0
+            for (i = 0; i < 20; i++) {
+                const item = data[i]
                 const lng = new window.T.LngLat(item.longitude, item.latitude)
                 lng.custom_data = item
                 lnglats.push(lng)
-            })
+            }
             const _CloudCollection = new window.T.CloudMarkerCollection(lnglats, {
                 color: 'red',
                 SizeType: window.TDT_POINT_SIZE_NORMAL
@@ -184,7 +185,7 @@ export const useMarkerStore = defineStore('markerOptions', {
         },
         removePOI() {
             const { removeOverLay, mapOverLay } = useTiandituStore()
-            mapOverLay['ZAIHAI'].destroy
+            mapOverLay['ZAIHAI'].destroy()
             removeOverLay('ZAIHAI')
             this.isShowPOI = false
         },
@@ -229,21 +230,21 @@ export const useMarkerStore = defineStore('markerOptions', {
                     lat: tt[i].latitude,
                     lng: tt[i].longitude,
                     count: tt[i].count
-                });
+                })
             }
             const heatmapOverlay = new window.T.HeatmapOverlay({
-                "radius": 30,
-            });
-            console.log(heatmapOverlay);
+                radius: 30
+            })
+            console.log(heatmapOverlay)
             const { addOverLay } = useTiandituStore()
-            addOverLay('HEAT', heatmapOverlay);
-            heatmapOverlay.setDataSet({data: res, max: 100});
+            addOverLay('HEAT', heatmapOverlay)
+            heatmapOverlay.setDataSet({ data: res, max: 100 })
             this.isShowHeat = true
         },
         removeHeat() {
             const { removeOverLay, mapOverLay } = useTiandituStore()
             removeOverLay('HEAT')
             this.isShowHeat = false
-        },
+        }
     }
 })

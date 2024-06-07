@@ -150,13 +150,13 @@ const railStyle = ({ focused, checked }) => {
                     </n-icon>
                     <span class="mx-2">风场可视化 </span>
                 </div>
-<!--                <div class="my-2">-->
-<!--                    是否显示风场数据-->
-<!--                    <n-switch-->
-<!--                        :value="pinia_useMarkerStore.isShowTmapWind"-->
-<!--                        @click="pinia_useMarkerStore.switchTmapWind()"-->
-<!--                    />-->
-<!--                </div>-->
+                <!--                <div class="my-2">-->
+                <!--                    是否显示风场数据-->
+                <!--                    <n-switch-->
+                <!--                        :value="pinia_useMarkerStore.isShowTmapWind"-->
+                <!--                        @click="pinia_useMarkerStore.switchTmapWind()"-->
+                <!--                    />-->
+                <!--                </div>-->
                 <template #suffix>
                     <n-button type="info" @click="pinia_useMarkerStore.initTmapWind()"
                         >生成
@@ -169,40 +169,40 @@ const railStyle = ({ focused, checked }) => {
                     </n-button>
                 </template>
             </n-list-item>
-            <n-list-item>
+            <!-- <n-list-item>
                 <div class="mb-2 flex flex-row items-center">
                     <n-icon size="20" color="#0e7a0d">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             xmlns:xlink="http://www.w3.org/1999/xlink"
-                            viewBox="0 0 32 32"
+                            viewbox="0 0 32 32"
                         >
-                            <path d="M12 10h2v4h-2z" fill="currentColor"></path>
-                            <path d="M18 18h4v2h-4z" fill="currentColor"></path>
-                            <path d="M14 18v-2h-2v4h4v-2h-2z" fill="currentColor"></path>
-                            <path d="M16 4h12v12H16z" fill="currentColor"></path>
+                            <path d="m12 10h2v4h-2z" fill="currentcolor"></path>
+                            <path d="m18 18h4v2h-4z" fill="currentcolor"></path>
+                            <path d="m14 18v-2h-2v4h4v-2h-2z" fill="currentcolor"></path>
+                            <path d="m16 4h12v12h16z" fill="currentcolor"></path>
                             <path
-                                d="M17.885 29.997l-6.066-3.855L4 27.989V4h10v4h-2V6H6v19.461l6.181-1.46l5.934 3.772L22.818 26H26v-6h-2v-2h4v10h-4.818l-5.297 1.997z"
-                                fill="currentColor"
+                                d="m17.885 29.997l-6.066-3.855l4 27.989v4h10v4h-2v6h6v19.461l6.181-1.46l5.934 3.772l22.818 26h26v-6h-2v-2h4v10h-4.818l-5.297 1.997z"
+                                fill="currentcolor"
                             ></path>
                         </svg>
                     </n-icon>
                     <span class="mx-2">地质灾害记录 </span>
                 </div>
-<!--                <div class="my-2">-->
-<!--                    是否显示灾害记录-->
-<!--                    <n-switch-->
-<!--                        :value="pinia_useMarkerStore.isShowPOI"-->
-<!--                        @click="pinia_useMarkerStore.switchPOI()"-->
-<!--                    />-->
-<!--                </div>-->
+               <div class="my-2">-->
+            <!--                    是否显示灾害记录-->
+            <!--                    <n-switch-->
+            <!--                        :value="pinia_usemarkerstore.isshowpoi"-->
+            <!--                        @click="pinia_usemarkerstore.switchpoi()"-->
+            <!--                    />-->
+            <!--                </div>
                 <template #suffix>
-                    <n-button type="info" @click="pinia_useMarkerStore.initPOI()">生成 </n-button>
-                    <n-button class="mt-2" type="warning" @click="pinia_useMarkerStore.removePOI()"
+                    <n-button type="info" @click="pinia_usemarkerstore.initpoi()">生成 </n-button>
+                    <n-button class="mt-2" type="warning" @click="pinia_usemarkerstore.removepoi()"
                         >销毁
                     </n-button>
                 </template>
-            </n-list-item>
+            </n-list-item> -->
             <n-list-item>
                 <div class="mb-2 flex flex-row items-center">
                     <n-icon size="20" color="#0e7a0d">
@@ -233,7 +233,7 @@ const railStyle = ({ focused, checked }) => {
                 <template #suffix>
                     <n-button type="info" @click="pinia_useMarkerStore.initHeat()">生成 </n-button>
                     <n-button class="mt-2" type="warning" @click="pinia_useMarkerStore.removeHeat()"
-                    >销毁
+                        >销毁
                     </n-button>
                 </template>
             </n-list-item>

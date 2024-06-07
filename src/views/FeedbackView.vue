@@ -4,7 +4,6 @@ import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import { feedback, getFeedbackById, getFeedbacks, sendToOSS } from '@/api'
 import axios from 'axios'
-import { Button } from 'ant-design-vue'
 
 const feedbacks = ref<{ feedbackId: number; title: string; time: string; status: string }[]>([])
 
@@ -26,7 +25,7 @@ const curFeedback = ref({
     content: '',
     answer: '',
     time: '',
-    status: ''
+    status: 'pending'
 })
 
 const submitFeedback = async () => {
@@ -71,7 +70,7 @@ const submitFeedback = async () => {
                                 <p class="pt-3 w-[25%]">{{ feedback.time }}</p>
                                 <p class="pt-3 w-[25%]">{{ feedback.title }}</p>
                                 <p class="pt-3 w-[25%]">
-                                    {{ feedback.status === 'pending' ? '正在处理' : '已有回复' }}
+                                    {{ feedback.status === 'finished' ? '已有回复' : '正在处理' }}
                                 </p>
                                 <el-button
                                     @click="

@@ -6,7 +6,7 @@ import Toast from 'primevue/toast'
 import { useToast } from 'primevue/usetoast'
 import FileUpload, { type FileUploadUploaderEvent } from 'primevue/fileupload'
 import axios from 'axios'
-import { subscribe } from '@/api'
+import { getWarning, subscribe } from '@/api'
 const toast = useToast()
 
 const profile = ref<PersonProfile>({
@@ -34,11 +34,15 @@ const handleSubmit = async () => {
         life: 3000
     })
     // await subscribe(subscriptions.value)
-    toast.add({
-        severity: 'warn',
-        summary: '出事了',
-        life: 2000
-    })
+    await subscribe(subscriptions.value)
+    const res = await getWarning()
+    if (res.status === 200) {
+        toast.add({
+            severity: 'warn',
+            summary: res.data.msg,
+            life: 4000
+        })
+    }
 }
 const customUploader = async (event: FileUploadUploaderEvent) => {
     const file = event.files[0]
