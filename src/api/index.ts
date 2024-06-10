@@ -134,3 +134,7 @@ export async function getSubscriptions() {
 export async function getHeatMap() {
     return await instance.get('/getHeatMap/')
 }
+
+export async function getWindVector() {
+    return await instance.get('/getWindVector/')
+}
