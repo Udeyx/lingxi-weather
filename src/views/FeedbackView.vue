@@ -45,8 +45,12 @@ const submitFeedback = async () => {
         </template>
     </Dialog>
     <Dialog v-model:visible="feedbackDetailVisible" modal :header="curFeedback.title">
-        <article v-html="curFeedback.content" />
-        <article v-html="curFeedback.answer" />
+        <div class="prose">
+            <h2>反馈内容</h2>
+            <div v-html="curFeedback.content" />
+            <h2>回答</h2>
+            <div v-html="curFeedback.answer" />
+        </div>
     </Dialog>
     <main class="flex relative flex-col w-full h-full bg-white/50 backdrop-blur-md">
         <Button
