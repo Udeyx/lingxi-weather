@@ -56,6 +56,7 @@ const mockSixWeather: PredictWeather[] = [
 const sixWeather = ref<PredictWeather[]>(mockSixWeather)
 onMounted(async () => {
     const res = await getSixWeather()
+    console.log(res.data)
     sixWeather.value = res.data.map(
         (dt: {
             time: string
@@ -92,7 +93,7 @@ onMounted(async () => {
                                 <i :class="'text-4xl  qi-' + weather.iconId" />
                                 <div class="flex items-center gap-1 text-2xl">
                                     <i class="qi-1009" />
-                                    <span>{{ weather.maxTemp + '~' + weather.minTemp }}</span>
+                                    <span>{{ weather.minTemp + '~' + weather.maxTemp }}</span>
                                 </div>
                                 <div class="flex items-center gap-1 text-2xl">
                                     <i class="qi-2120" />
@@ -114,11 +115,11 @@ onMounted(async () => {
                             <div class="flex flex-col items-center gap-2">
                                 <h1 class="text-2xl">{{ weather.time }}</h1>
                                 <i :class="'text-5xl  qi-' + weather.iconId" />
-                                <div class="flex items-center gap-1 text-2xl">
+                                <div class="flex items-center gap-1 text-sm">
                                     <i class="qi-1009" />
-                                    <span>{{ weather.temp }}</span>
+                                    <span>{{ weather.minTemp + '~' + weather.maxTemp }}</span>
                                 </div>
-                                <div class="flex items-center gap-1 text-xl">
+                                <div class="flex items-center gap-1 text-sm">
                                     <i class="qi-2120" />
                                     <span>{{ weather.humidity }}</span>
                                 </div>
