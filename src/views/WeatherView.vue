@@ -131,7 +131,7 @@ import geoJsonData from '@/assets/GeoCity.json'
 import { citys } from '@/assets/citys'
 import { Scene, LineLayer } from '@antv/l7'
 import { GaodeMap } from '@antv/l7-maps'
-import { getWeather, staticHostUrl } from '@/api'
+import { getWeather, staticHostUrl, getWindVector } from '@/api'
 
 const IconFont = createFromIconfontCN({
     scriptUrl: '//at.alicdn.com/t/c/font_4511139_4duxindyi5k.js'
@@ -227,6 +227,10 @@ onMounted(async () => {
         //初始化卡片
         initWeatherCard()
     }
+
+    const res_wind = await getWindVector()
+    WindData.value = res_wind.data.vector
+
     AMapLoader.load({
         key: '649482c0582e18c52dc137d9c58ce18f', // 申请好的Web端开发者Key，首次调用 load 时必填
         version: '2.0', // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
@@ -267,13 +271,6 @@ onMounted(async () => {
                     scene.map.addControl(new AMap.ToolBar())
                     scene.map.addControl(new AMap.Scale())
                 })
-                fetch(
-                    'https://gw.alipayobjects.com/os/bmw-prod/7455fead-1dc0-458d-b91a-fb4cf99e701e.txt'
-                )
-                    .then((res) => res.text())
-                    .then((data) => {
-                        WindData.value = data
-                    })
                 AMap.plugin('AMap.GeoJSON', function () {
                     //创建 geoJSON 实例，传入 GeoJSON 数据和其他选项
                     geoJsonTemp = new AMap.GeoJSON({
