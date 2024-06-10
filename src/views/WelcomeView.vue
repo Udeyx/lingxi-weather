@@ -52,7 +52,7 @@ const handleLogin = async () => {
         localStorage.setItem('token', res.data.access)
         localStorage.setItem('username', res.data.username)
         localStorage.setItem('area', res.data.default_area)
-        localStorage.setItem('avatar', res.data.avatar)
+        localStorage.setItem('avatar', res.data.avatar || '/files/default_avatar.png')
         localStorage.setItem('phone', form.value.phone)
         localStorage.setItem('locId', res.data.default_area)
         showSuccess()

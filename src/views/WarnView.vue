@@ -1,8 +1,16 @@
 <script lang="ts" setup>
 import DisasterTable from '@/components/disaster/DisasterTable.vue'
-import historyDisasters from '@/assets/disasters.json'
-import { ref } from 'vue'
-const disasters = ref(historyDisasters)
+import { onMounted, ref } from 'vue'
+import { getAllWarning } from '@/api'
+const disasters = ref()
+onMounted(async () => {
+    const res = await getAllWarning()
+    if (res.status === 200) {
+        disasters.value = res.data.map((dt: { startTime: string; endTime: string }) => {
+            return { ...dt, time: dt.startTime + '-' + dt.endTime }
+        })
+    }
+})
 </script>
 
 <template>

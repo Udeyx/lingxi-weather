@@ -5,7 +5,8 @@ import { onMounted, ref } from 'vue'
 
 interface PredictWeather {
     time: string
-    temp: number
+    minTemp: number
+    maxTemp: number
     humidity: number
     iconId: number
 }
@@ -56,11 +57,18 @@ const sixWeather = ref<PredictWeather[]>(mockSixWeather)
 onMounted(async () => {
     const res = await getSixWeather()
     sixWeather.value = res.data.map(
-        (dt: { time: string; iconId: string; temp: number; humidity: string }) => {
+        (dt: {
+            time: string
+            iconId: string
+            max_temp: number
+            min_temp: number
+            humidity: string
+        }) => {
             return {
                 time: toweek(dt.time),
                 iconId: +dt.iconId,
-                temp: dt.temp,
+                maxTemp: dt.max_temp,
+                minTemp: dt.min_temp,
                 humidity: +dt.humidity
             }
         }
@@ -84,7 +92,7 @@ onMounted(async () => {
                                 <i :class="'text-4xl  qi-' + weather.iconId" />
                                 <div class="flex items-center gap-1 text-2xl">
                                     <i class="qi-1009" />
-                                    <span>{{ weather.temp }}</span>
+                                    <span>{{ weather.maxTemp + '~' + weather.minTemp }}</span>
                                 </div>
                                 <div class="flex items-center gap-1 text-2xl">
                                     <i class="qi-2120" />

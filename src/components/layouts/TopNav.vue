@@ -1,5 +1,7 @@
 <script lang="ts" setup>
+import { staticHostUrl } from '@/api'
 import logo from '@/assets/logo.png'
+import { useLocalStorage } from '@vueuse/core'
 import Avatar from 'primevue/avatar'
 import { RouterLink } from 'vue-router'
 const menuItems: { label: string; icon: string; href: string }[] = [
@@ -34,6 +36,7 @@ const menuItems: { label: string; icon: string; href: string }[] = [
         href: '/feedback'
     }
 ]
+const avatar = useLocalStorage('avatar', localStorage.getItem('avatar') || '')
 </script>
 
 <template>
@@ -52,7 +55,7 @@ const menuItems: { label: string; icon: string; href: string }[] = [
         </template>
         <template #end>
             <RouterLink to="/person">
-                <Avatar label="A" />
+                <Avatar :image="staticHostUrl + avatar" />
             </RouterLink>
         </template>
     </Menubar>

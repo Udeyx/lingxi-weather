@@ -11,6 +11,7 @@ import liangshai from '@/assets/icons/recommendation/liangshai.png'
 import journey from '@/assets/icons/recommendation/journey.png'
 import comfortable from '@/assets/icons/recommendation/comfortable.png'
 import xiche from '@/assets/icons/recommendation/xiche.png'
+import { getIndicators } from '@/api'
 
 const cards: { name: string; title: string; icon: string }[] = [
     { name: 'sport', title: '运动', icon: sport },
@@ -32,10 +33,16 @@ const recommendation = ref<{ [key: string]: string }>({
     kongtiao: '',
     liangshai: '',
     journey: '',
-    comfortable: ''
+    comfortable: '',
+    xiche: ''
 })
 onMounted(async () => {
-    recommendation.value = oneMockRecommendation
+    const res = await getIndicators()
+    if (res.status === 200) {
+        recommendation.value = res.data
+    } else {
+        recommendation.value = oneMockRecommendation
+    }
 })
 </script>
 
@@ -52,7 +59,6 @@ onMounted(async () => {
                     >
                         <template #content>
                             <div class="flex flex-col items-center">
-                                <!-- <Avatar :image="card.icon" size="small" /> -->
                                 <img :src="card.icon" width="28" height="28" />
                                 <h2 class="text-nowrap text-xl text-pink-300">
                                     {{ recommendation[card.name] }}

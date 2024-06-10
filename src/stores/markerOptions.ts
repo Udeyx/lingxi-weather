@@ -9,6 +9,7 @@ import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 import 'leaflet.markercluster'
 import ZAIHAI from '@/assets/disasters.json'
 import Hot from '@/assets/hott.json'
+import { getHeatMap } from '@/api'
 
 export const useMarkerStore = defineStore('markerOptions', {
     state: () => ({
@@ -220,9 +221,13 @@ export const useMarkerStore = defineStore('markerOptions', {
             //   keepAliveOnHover: true,
             // });
         },
-        initHeat() {
+        async initHeat() {
             const tt = Hot
-            console.log(tt)
+            try {
+                const rres = await getHeatMap()
+            } catch (e) {
+                console.log(666)
+            }
             const res = []
             for (let i = 0; i < tt.length; i++) {
                 res.push({

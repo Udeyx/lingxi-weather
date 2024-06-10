@@ -1,9 +1,12 @@
 import type { PersonProfile } from '@/types/person'
 import axios from 'axios'
 
+const backendUrl = 'http://114.116.201.58:8080'
+export const staticHostUrl = 'http://101.126.87.200:4000'
+
 const instance = axios.create({
     timeout: 3000,
-    baseURL: 'http://114.116.201.58:8080/user'
+    baseURL: backendUrl + '/user'
 })
 
 instance.interceptors.request.use((request) => {
@@ -44,7 +47,9 @@ export async function register({
 }
 
 export async function getIndicators() {
-    return await instance.get('/getIndicators/')
+    const res = await instance.get('/getIndicators/')
+    console.log(res)
+    return res
 }
 
 export async function feedback({ title, content }: { title: string; content: string }) {
@@ -60,7 +65,7 @@ export async function getFeedbackById(feedbackId: number) {
 }
 
 export async function sendToOSS(content: string) {
-    return await axios.post('http://211.159.168.136:4000/upload-quill-content', { content })
+    return await axios.post(staticHostUrl + '/upload-quill-content', { content })
 }
 
 export async function getWeather() {
@@ -96,7 +101,7 @@ export async function getTodayPrediction() {
 }
 
 export async function subscribe(data: any) {
-    await instance.post('/subscribe/', {
+    await instance.post('/updateSubscribe/', {
         subscribes: data
     })
 }
@@ -106,4 +111,26 @@ export async function getSun(localid: number) {
 
 export async function getWarning() {
     return await instance.get('/getWarning/')
+}
+
+export async function getAllWarning() {
+    return await instance.get('/getAllWarning/')
+}
+
+export async function updateInfo(profile: {
+    password?: string
+    username?: string
+    avatar?: string
+    locId?: number
+}) {
+    console.log(profile)
+    await instance.put('/updateInfo/', { ...profile, default_area: profile.locId })
+}
+
+export async function getSubscriptions() {
+    return await instance.get('/getSubscribes/')
+}
+
+export async function getHeatMap() {
+    return await instance.get('/getHeatMap/')
 }

@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import cities from '@/assets/cities.json'
 import type { PersonProfile } from '@/types/person'
-import { computed, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import Toast from 'primevue/toast'
 import { useToast } from 'primevue/usetoast'
 import FileUpload, { type FileUploadUploaderEvent } from 'primevue/fileupload'
 import axios from 'axios'
-import { getWarning, subscribe } from '@/api'
+import { getSubscriptions, getWarning, staticHostUrl, subscribe, updateInfo } from '@/api'
 const toast = useToast()
 
 const profile = ref<PersonProfile>({
@@ -17,15 +17,11 @@ const profile = ref<PersonProfile>({
     locId: +(localStorage.getItem('locId') ?? 114514),
     subCities: []
 })
-
-const subscriptions = computed(() =>
-    profile.value.subCities.map((locId) => {
-        return {
-            areaId: locId,
-            disasterTypes: [1001, 1002, 1006, 1005, 1004, 1003, 1009, 1010, 1034, 1022]
-        }
-    })
-)
+const modifyTarget = ref<'profile' | 'subscription'>('profile')
+const options = ref([
+    { name: '基本信息', value: 'profile' },
+    { name: '灾害订阅', value: 'subscription' }
+])
 
 const handleSubmit = async () => {
     toast.add({
@@ -33,8 +29,13 @@ const handleSubmit = async () => {
         summary: '修改成功',
         life: 3000
     })
-    // await subscribe(subscriptions.value)
-    await subscribe(subscriptions.value)
+    if (modifyTarget.value === 'profile') {
+        await updateInfo(
+            Object.fromEntries(Object.entries(profile.value).filter(([k, v]) => v !== ''))
+        )
+    } else {
+        await subscribe(profile.value.subCities)
+    }
     const res = await getWarning()
     if (res.status === 200) {
         toast.add({
@@ -45,40 +46,47 @@ const handleSubmit = async () => {
     }
 }
 const customUploader = async (event: FileUploadUploaderEvent) => {
-    const file = event.files[0]
+    const file = Array.isArray(event.files) ? event.files[0] : event.files
     const formData = new FormData()
     formData.append('file', file)
 
     try {
-        const res = await axios.post('http://211.159.168.136:4000/upload', formData, {
+        const res = await axios.post(staticHostUrl + '/upload', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
         })
-        profile.value.avatar = 'http://211.159.168.136:4000' + res.data.url
+        profile.value.avatar = res.data.url
         localStorage.setItem('avatar', profile.value.avatar)
     } catch (error) {
         console.error('上传失败:', error)
     }
 }
 onMounted(async () => {
-    if (profile.value.avatar === '') {
-        profile.value.avatar = 'http://211.159.168.136:4000/files/default_avatar.png'
-        localStorage.setItem('avatar', profile.value.avatar)
-    }
-    profile.value.avatar = localStorage.getItem('avatar')
+    profile.value.avatar = localStorage.getItem('avatar') ?? '/files/default_avatar.png'
     profile.value.phone = localStorage.getItem('phone') ?? '33344445555'
     profile.value.username = localStorage.getItem('username') ?? 'user1'
+    const res = await getSubscriptions()
+    if (res.status === 200) {
+        console.log(res.data)
+        profile.value.subCities = res.data
+    }
 })
 </script>
 
 <template>
-    <main class="flex h-full flex-col items-center justify-center gap-4">
-        <Toast />
-        <div class="flex flex-col items-center w-96">
-            <div class="flex items-center w-full">
+    <Toast />
+    <main class="flex h-full flex-col items-center justify-center gap-2">
+        <SelectButton
+            v-model="modifyTarget"
+            :options="options"
+            option-label="name"
+            option-value="value"
+        />
+        <div class="flex flex-col items-center gap-2">
+            <div v-if="modifyTarget === 'profile'" class="flex items-center w-full">
                 <div class="mr-4 aspect-square h-full">
-                    <Avatar :image="profile.avatar" class="h-full w-full text-5xl" />
+                    <Avatar :image="staticHostUrl + profile.avatar" class="h-60 w-60 mt-1" />
                 </div>
                 <div class="flex flex-col">
                     <div class="flex flex-col gap-2">
@@ -125,7 +133,10 @@ onMounted(async () => {
                 </div>
             </div>
             <MultiSelect
-                class="ml-6 w-[410px] mt-4"
+                v-else
+                :max-selected-labels="10"
+                :show-toggle-all="false"
+                class="w-96"
                 display="chip"
                 v-model="profile.subCities"
                 :options="cities"
@@ -133,7 +144,7 @@ onMounted(async () => {
                 option-label="name"
                 placeholder="订阅地区"
             />
+            <Button label="提交修改" class="w-full" @click="handleSubmit" />
         </div>
-        <Button label="提交修改" class="w-80" @click="handleSubmit" />
     </main>
 </template>

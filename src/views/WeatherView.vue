@@ -131,7 +131,7 @@ import geoJsonData from '@/assets/GeoCity.json'
 import { citys } from '@/assets/citys'
 import { Scene, LineLayer } from '@antv/l7'
 import { GaodeMap } from '@antv/l7-maps'
-import { getWeather } from '@/api'
+import { getWeather, staticHostUrl } from '@/api'
 
 const IconFont = createFromIconfontCN({
     scriptUrl: '//at.alicdn.com/t/c/font_4511139_4duxindyi5k.js'
@@ -467,13 +467,9 @@ onMounted(async () => {
                 for (let i = 0; i < citys.length; i++) {
                     let path = null
                     try {
-                        path =
-                            'http://211.159.168.136:4000/files/' +
-                            weathers[citys[i].localid].icon +
-                            '.png'
+                        path = staticHostUrl + '/files/' + weathers[citys[i].localid].icon + '.png'
                     } catch (e) {
-                        path =
-                            'http://211.159.168.136:4000/files/' + weathers[101010100].icon + '.png'
+                        path = staticHostUrl + '/files/' + weathers[101010100].icon + '.png'
                     }
                     let icon = {
                         // 图标类型，现阶段只支持 image 类型

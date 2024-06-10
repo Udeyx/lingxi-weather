@@ -21,6 +21,7 @@ onMounted(async () => {
     if (res.status === 200) {
         curWeather.value = {
             ...curWeather.value,
+            iconId: res.data.icon,
             heat: res.data.temp,
             humidity: res.data.humidity,
             windSpeed: res.data.windSpeed,

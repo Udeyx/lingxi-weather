@@ -4,7 +4,7 @@
             <div class="sun-chart">
                 <img
                     class="sun"
-                    src="http://211.159.168.136:4000/files/100.png"
+                    src="http://101.126.87.200:4000/files/100.png"
                     :style="{ left: `${sunPositionX}%`, top: `${sunPositionY}%` }"
                     alt="Sun Icon"
                 />
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { getSun } from '@/api'
+import { getSun, staticHostUrl } from '@/api'
 export default {
     data() {
         return {
@@ -198,49 +198,6 @@ export default {
     }
 }
 </script>
-
-<!-- <style scoped>
-.sun-chart-container {
-  text-align: center;
-  background: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.sun-chart {
-  position: relative;
-  margin: 10px 0;
-}
-
-.time-label {
-  position: absolute;
-  bottom: -20px;
-  font-size: 14px;
-  color: #111111;
-}
-
-.sunrise-time {
-  left: 0;
-}
-
-.sunset-time {
-  right: 0;
-}
-
-canvas {
-  display: block;
-  margin: 0 auto;
-  border-bottom: 2px solid #ccc;
-}
-
-.sun {
-  position: absolute;
-  width: 30px;
-  height: 30px;
-  transition: left 0.1s ease, top 0.1s ease;
-}
-</style> -->
 
 <style scoped>
 .sun-chart-container {

@@ -26,9 +26,7 @@ onMounted(async () => {
                 <h1 class="mb-12 text-3xl">未来24h天气</h1>
                 <Timeline :value="predictions">
                     <template #opposite="slotProps">
-                        <span class="text-nowrap text-[18px]">{{
-                            slotProps.item.time.split(' ')[1]
-                        }}</span>
+                        <span class="text-nowrap text-[18px]">{{ slotProps.item.time }}</span>
                     </template>
                     <template #content="slotProps">
                         <div class="flex items-center gap-2 text-xl">

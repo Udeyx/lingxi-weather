@@ -20,16 +20,12 @@ onMounted(async () => {
             life: 2000
         })
     }
-    console.log(res.data)
 })
 </script>
 
 <template>
     <Toast />
-    <main
-        v-if="width > 768"
-        class="bg-[url('@/assets/bg.webp')] h-full flex-grow flex flex-col overflow-y-auto mt-4"
-    >
+    <main v-if="width > 768" class="h-full flex-grow flex flex-col overflow-y-auto mt-4">
         <div class="flex flex-wrap items-start justify-center gap-4 mb-4">
             <WeatherCard class="h-full" />
             <PredictCard class="h-full" />
