@@ -100,18 +100,10 @@ export default {
             return `${year}${month}${day}` // 返回格式化后的字符串
         },
         async updateSunPosition() {
-            // const data = await getSun(101010100)
-            // if (data.status != 200) {
-            //     this.sunPositionX = -4
-            //     this.sunPositionY = 90
-            // } else {
+            const data = await getSun(localStorage.getItem('locId'))
             const currentTime = new Date().getHours() + new Date().getMinutes() / 60
-            const sunriseTime = 4.7
-            // new Date(data.data.sunrise).getHours() +
-            // new Date(data.data.sunrise).getMinutes() / 60
-            const sunsetTime = 19.3
-            // new Date(data.data.sundown).getHours() +
-            // new Date(data.data.sundown).getMinutes() / 60
+            const sunriseTime = new Date(data.data.sunrise).getHours() + new Date(data.data.sunrise).getMinutes() / 60
+            const sunsetTime = new Date(data.data.sundown).getHours() + new Date(data.data.sundown).getMinutes() / 60
 
             this.sunrise = sunriseTime
             this.sunset = sunsetTime
@@ -135,7 +127,6 @@ export default {
                 this.sunPositionX = -4
                 this.sunPositionY = 90
             }
-            // }
         },
         animateSun() {
             if (this.animationFrameId) {
