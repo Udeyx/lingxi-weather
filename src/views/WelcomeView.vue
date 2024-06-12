@@ -14,7 +14,7 @@ const showSuccess = () => {
         severity: 'success',
         summary: '登录成功',
         detail: '登录成功',
-        life: 3000
+        life: 30000000
     })
 }
 
@@ -23,7 +23,7 @@ const showError = () => {
         severity: 'error',
         summary: '登录失败',
         detail: '用户名或密码错误',
-        life: 3000
+        life: 3000000
     })
 }
 

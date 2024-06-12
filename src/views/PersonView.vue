@@ -27,12 +27,14 @@ const handleSubmit = async () => {
     toast.add({
         severity: 'success',
         summary: '修改成功',
-        life: 3000
+        life: 30000000
     })
     if (modifyTarget.value === 'profile') {
         await updateInfo(
             Object.fromEntries(Object.entries(profile.value).filter(([k, v]) => v !== ''))
         )
+        localStorage.setItem('username', profile.value.username)
+        localStorage.setItem('locId', profile.value.locId.toString())
     } else {
         await subscribe(profile.value.subCities)
     }
@@ -41,7 +43,7 @@ const handleSubmit = async () => {
         toast.add({
             severity: 'warn',
             summary: res.data.msg,
-            life: 4000
+            life: 40000000
         })
     }
 }

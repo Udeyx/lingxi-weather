@@ -17,7 +17,7 @@ onMounted(async () => {
         toast.add({
             severity: 'warn',
             summary: res.data.msg,
-            life: 2000
+            life: 20000000
         })
     }
 })
