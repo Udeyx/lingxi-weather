@@ -2,8 +2,8 @@
 import { getCurWeather } from '@/api'
 import { oneMockWeather, type Weather } from '@/types/weather'
 import { onMounted, ref } from 'vue'
-
-const location = localStorage.getItem('location') || '北京市'
+import cityMap from '@/assets/cityMap.json'
+const location = ref<string>()
 const curWeather = ref<Weather>(oneMockWeather)
 function getNowFormatDate() {
     let date = new Date(),
@@ -19,6 +19,7 @@ function getNowFormatDate() {
 onMounted(async () => {
     const res = await getCurWeather()
     if (res.status === 200) {
+        location.value = cityMap[res.data.area.toString()]
         curWeather.value = {
             ...curWeather.value,
             iconId: res.data.icon,
